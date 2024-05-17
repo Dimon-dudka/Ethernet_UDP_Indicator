@@ -2,14 +2,20 @@
 
 indicators_data::indicators_data(QObject * parrent) : QObject(parrent) {
     indicators_count = 10;
+    indicators_active_count = 0;
 
     for(quint16 i = 0;i<indicators_count;++i){
         indicators_work_map[i]=true;
 
+        indicators_active_count+=1;
         sOneIndicatorStats tmp_status{i,0,0,0,0,0};
 
         indicators_info.push_back(std::move(tmp_status));
     }
+}
+
+void indicators_data::get_indicators_count_slot(){
+    emit return_indicators_count_signal(indicators_active_count);
 }
 
 void indicators_data::change_settings_slot(QVector<quint16>new_data){
@@ -17,6 +23,11 @@ void indicators_data::change_settings_slot(QVector<quint16>new_data){
     //  0       1           2       3   4       5    6  7
     // Index; Available; Serial; Type; Power; Color; I; Error
     indicators_work_map[new_data[0]]=(bool)new_data[1];
+
+    indicators_active_count=0;
+    for(quint16 i = 0;i<indicators_count;++i){
+        if(indicators_work_map[i])indicators_active_count+=1;
+    }
 
     indicators_info[new_data[0]].SerialNum = new_data[2];
     indicators_info[new_data[0]].Type = new_data[3];

@@ -26,11 +26,11 @@ private:
 private slots:
 
     void exit_slot();
-    void error_message_slot(QString info);
     void send_forward_data_slot(QVector<quint16>data);
 
 public slots:
 
+    void error_message_slot(QString info);
     void update_widgets_info_slot(QVector<quint16>data);
 
 signals:
