@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(Ethernet_UDP_Indicator VERSION 0.1 LANGUAGES CXX)
+project(Indicators_Device_Immitator_App VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -22,30 +22,31 @@ endif()
 set(HEADERS
     ${CMAKE_SOURCE_DIR}/Basic_Types.h
     ${CMAKE_SOURCE_DIR}/widget_manager/widget_manager.h
-    ${CMAKE_SOURCE_DIR}/start_menu/start_menu.h
-    ${CMAKE_SOURCE_DIR}/network_data/network_data.h
-    ${CMAKE_SOURCE_DIR}/new_ip_menu/new_ip_menu.h
     ${CMAKE_SOURCE_DIR}/workspace_menu/workspace_menu.h
+    ${CMAKE_SOURCE_DIR}/indicators_data/indicators_data.h
+    ${CMAKE_SOURCE_DIR}/network_work/network_work.h
+    ${CMAKE_SOURCE_DIR}/indicator_subwidget/indicator_subwidget.h
 )
 
 set(SOURCES
     main.cpp
     ${CMAKE_SOURCE_DIR}/widget_manager/widget_manager.cpp
-    ${CMAKE_SOURCE_DIR}/start_menu/start_menu.cpp
-    ${CMAKE_SOURCE_DIR}/network_data/network_data.cpp
-    ${CMAKE_SOURCE_DIR}/new_ip_menu/new_ip_menu.cpp
     ${CMAKE_SOURCE_DIR}/workspace_menu/workspace_menu.cpp
+    ${CMAKE_SOURCE_DIR}/indicators_data/indicators_data.cpp
+    ${CMAKE_SOURCE_DIR}/network_work/network_work.cpp
+    ${CMAKE_SOURCE_DIR}/indicator_subwidget/indicator_subwidget.cpp
 )
 
-add_executable(Ethernet_UDP_Indicator ${SOURCES} ${HEADERS})
+add_executable(Ethernet_UDP_Indicator ${SOURCES} ${HEADERS}
+    indicator_subwidget/indicator_subwidget.h indicator_subwidget/indicator_subwidget.cpp)
 
 target_include_directories(Ethernet_UDP_Indicator
     PUBLIC ${CMAKE_SOURCE_DIR}
     PUBLIC ${CMAKE_SOURCE_DIR}/widget_manager
-    PUBLIC ${CMAKE_SOURCE_DIR}/start_menu
-    PUBLIC ${CMAKE_SOURCE_DIR}/network_data
-    PUBLIC ${CMAKE_SOURCE_DIR}/new_ip_menu
     PUBLIC ${CMAKE_SOURCE_DIR}/workspace_menu
+    PUBLIC ${CMAKE_SOURCE_DIR}/indicators_data
+    PUBLIC ${CMAKE_SOURCE_DIR}/network_work
+    PUBLIC ${CMAKE_SOURCE_DIR}/indicator_subwidget
 )
 
 target_link_libraries(Ethernet_UDP_Indicator

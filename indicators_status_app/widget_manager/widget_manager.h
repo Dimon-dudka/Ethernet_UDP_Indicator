@@ -5,8 +5,6 @@
 #include <QPointer>
 #include <QUdpSocket>
 
-#include "Basic_Types.h"
-
 //  Network data tool
 #include "network_data.h"
 
@@ -30,7 +28,8 @@ private slots:
     void set_current_start_menu();
     void set_current_new_ip_menu();
 
+    void open_error_box_slot(const QString& info);
+
 public:
     widget_manager(QStackedWidget *parrent = 0);
-    void tmp(){qDebug()<<"Ok";}
 };
