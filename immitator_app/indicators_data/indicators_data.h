@@ -16,6 +16,11 @@ private:
 
 public slots:
 
+    void change_settings_slot(QVector<quint16>new_data);
+
+signals:
+
+    void update_ui(QVector<quint16>);
 
 public:
 

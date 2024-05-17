@@ -16,8 +16,8 @@ workspace_menu::workspace_menu(QWidget * parrent):QWidget(parrent) {
             QPointer<indicator_subwidget> tmp = new indicator_subwidget(this,index);
 
             connect(tmp,SIGNAL(error_message_signal(QString)),this,SLOT(error_message_slot(QString)));
-            connect(tmp,SIGNAL(changes_signal(quint16, quint16, quint16,quint16,quint16,quint16,quint16,quint16 )),
-                this, SLOT(send_forward_data_slot(quint16,quint16,quint16,quint16,quint16,quint16,quint16,quint16)));
+            connect(tmp,SIGNAL(changes_signal(QVector<quint16>)),
+                    this, SLOT(send_forward_data_slot(QVector<quint16>)));
 
             subwidgets.push_back(tmp);
             main_layout->addWidget(tmp,i,j);
@@ -31,9 +31,14 @@ workspace_menu::workspace_menu(QWidget * parrent):QWidget(parrent) {
     setLayout(main_layout);
 }
 
-void workspace_menu::send_forward_data_slot(quint16 index, quint16 vailable, quint16 serial
-                        ,quint16 type,quint16 power,quint16 color,quint16 i,quint16 error){
-    emit send_forward_data_signal(index,vailable,serial,type,power,color,i,error);
+void workspace_menu::update_widgets_info_slot(QVector<quint16>data){
+    if(data[0]>=subwidgets.size())return;
+
+    subwidgets[data[0]]->update_info_slot(data);
+}
+
+void workspace_menu::send_forward_data_slot(QVector<quint16>data){
+    emit send_forward_data_signal(data);
 }
 
 void workspace_menu::exit_slot(){

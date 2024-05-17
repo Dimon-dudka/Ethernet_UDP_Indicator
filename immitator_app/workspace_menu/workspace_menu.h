@@ -4,6 +4,7 @@
 #include <QVector>
 #include <QPushButton>
 #include <QBoxLayout>
+#include <QVector>
 #include <QMessageBox>
 
 #include "indicator_subwidget.h"
@@ -26,17 +27,16 @@ private slots:
 
     void exit_slot();
     void error_message_slot(QString info);
-    void send_forward_data_slot(quint16 index, quint16 vailable, quint16 serial,quint16 type,
-                                quint16 power,quint16 color,quint16 i,quint16 error);
+    void send_forward_data_slot(QVector<quint16>data);
 
 public slots:
 
-
+    void update_widgets_info_slot(QVector<quint16>data);
 
 signals:
 
     void exit_signal();
-    void send_forward_data_signal(quint16, quint16, quint16,quint16,quint16,quint16,quint16,quint16);
+    void send_forward_data_signal(QVector<quint16>);
 
 public:
     workspace_menu(QWidget * parrent = 0);

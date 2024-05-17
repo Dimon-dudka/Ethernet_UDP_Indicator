@@ -14,4 +14,10 @@ widget_manager::widget_manager(QStackedWidget *parrent):QStackedWidget(parrent) 
 
     //Workspace connections
     connect(workspace_menu_wgt,SIGNAL(exit_signal()),this,SLOT(close()));
+    connect(workspace_menu_wgt,SIGNAL(send_forward_data_signal(QVector<quint16>)),
+            indicators_API,SLOT(change_settings_slot(QVector<quint16>)));
+
+    //  Indicators data connections
+    connect(indicators_API,SIGNAL(update_ui(QVector<quint16>))
+            ,workspace_menu_wgt,SLOT(update_widgets_info_slot(QVector<quint16>)));
 }

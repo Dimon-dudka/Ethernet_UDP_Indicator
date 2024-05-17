@@ -7,6 +7,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QComboBox>
+#include <QVector>
 #include <QVBoxLayout>
 
 class indicator_subwidget:public QWidget
@@ -27,10 +28,14 @@ private slots:
 
     void apply_slot();
 
+public slots:
+
+    void update_info_slot(QVector<quint16> new_data);
+
 signals:
 
     // Index; Available; Serial; Type; Power; Color; I; Error
-    void changes_signal(quint16, quint16, quint16,quint16,quint16,quint16,quint16,quint16 );
+    void changes_signal(QVector<quint16>);
     void error_message_signal(QString);
 
 public:

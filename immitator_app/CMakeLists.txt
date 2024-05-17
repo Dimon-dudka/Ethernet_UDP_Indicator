@@ -37,8 +37,7 @@ set(SOURCES
     ${CMAKE_SOURCE_DIR}/indicator_subwidget/indicator_subwidget.cpp
 )
 
-add_executable(Ethernet_UDP_Indicator ${SOURCES} ${HEADERS}
-    indicator_subwidget/indicator_subwidget.h indicator_subwidget/indicator_subwidget.cpp)
+add_executable(Ethernet_UDP_Indicator ${SOURCES} ${HEADERS})
 
 target_include_directories(Ethernet_UDP_Indicator
     PUBLIC ${CMAKE_SOURCE_DIR}

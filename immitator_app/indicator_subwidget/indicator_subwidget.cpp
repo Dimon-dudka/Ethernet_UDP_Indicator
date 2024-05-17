@@ -13,9 +13,9 @@ indicator_subwidget::indicator_subwidget(QWidget *parrent,quint16 index)
 
     QStringList tmp_box_values;
 
-    tmp_box_values<<"Available"<<"Unavailable";
+    tmp_box_values<<"Unavailable"<<"Available";
     is_available_box->addItems(tmp_box_values);
-    is_available_box->setCurrentIndex(0);
+    is_available_box->setCurrentIndex(1);
     tmp_box_values.clear();
 
     tmp_box_values<<"Yellow"<<"Green"<<"Red"<<"Reserve";
@@ -60,6 +60,20 @@ indicator_subwidget::indicator_subwidget(QWidget *parrent,quint16 index)
     setLayout(main_layout);
 }
 
+void indicator_subwidget::update_info_slot(QVector<quint16>new_data){
+    if(new_data[0]!=indicator_index)return;
+
+    //  0       1           2       3   4       5    6  7
+    // Index; Available; Serial; Type; Power; Color; I; Error
+    is_available_box->setCurrentIndex(new_data[1]);
+    serial_num_line_edit->setText(QString::number(new_data[2]));
+    type_box->setCurrentIndex(new_data[3]);
+    power_box->setCurrentIndex(new_data[4]);
+    color_box->setCurrentIndex(new_data[5]);
+    i_line_edit->setText(QString::number(new_data[6]));
+    error_line_edit->setText(QString::number(new_data[7]));
+}
+
 void indicator_subwidget::apply_slot(){
     bool chek;
 
@@ -84,7 +98,7 @@ void indicator_subwidget::apply_slot(){
         return;
     }
 
-    emit changes_signal(indicator_index,is_available_box->currentIndex(),tmp_serial
-        ,type_box->currentIndex(),power_box->currentIndex()
-        ,color_box->currentIndex(),tmp_i,tmp_error);
+    emit changes_signal({indicator_index,(quint16)is_available_box->currentIndex(),tmp_serial
+        ,(quint16)type_box->currentIndex(),(quint16)power_box->currentIndex()
+        ,(quint16)color_box->currentIndex(),tmp_i,tmp_error});
 }
