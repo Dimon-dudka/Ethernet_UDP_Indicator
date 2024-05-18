@@ -1,10 +1,32 @@
-#ifndef WORKSPACE_MENU_H
-#define WORKSPACE_MENU_H
+#pragma once
 
-class workspace_menu
+#include <QWidget>
+#include <QGridLayout>
+#include <QPushButton>
+#include <QHash>
+
+#include "subwidget_menu.h"
+
+class workspace_menu : public QWidget
 {
-public:
-    workspace_menu();
-};
+    Q_OBJECT
+private:
 
-#endif // WORKSPACE_MENU_H
+    uint32_t total_indicators_count;
+
+    QHash<uint32_t,QPointer<subwidget_menu>>subwidgets;
+
+    QPointer<QGridLayout>main_layout;
+    QPointer<QPushButton> back_button;
+
+private slots:
+
+    void back_button_slot();
+
+signals:
+
+    void back_signal();
+
+public:
+    workspace_menu(QWidget * parrent = 0);
+};

@@ -18,6 +18,7 @@ void network_data::change_device_ip_port(QHostAddress new_ip, quintptr new_port)
 }
 
 void network_data::initial_indicators_slot(){
+    change_device_ip_port();
     get_indicators_count();
 
     if(time_view)time_view->~QTimer();
@@ -83,9 +84,6 @@ void network_data::read_answer(){
             dataStream >> current_mA_bits >> tmp_stats.ErrorCode;
 
             tmp_stats.Current_mA = static_cast<quint32>(current_mA_bits);
-
-            qDebug()<<QString::number(tmp_stats.Current_mA)<<" "
-                     <<QString::number(tmp_stats.ErrorCode);
 
             emit indicator_info_signal(index,tmp_stats);
             break;

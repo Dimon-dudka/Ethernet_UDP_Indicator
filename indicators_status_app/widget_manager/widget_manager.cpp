@@ -7,9 +7,11 @@ widget_manager::widget_manager(QStackedWidget *parrent):QStackedWidget(parrent) 
 
     start_menu_wgt = new start_menu;
     new_ip_menu_wgt = new new_ip_menu;
+    workspace_menu_wgt = new workspace_menu;
 
     addWidget(start_menu_wgt);
     addWidget(new_ip_menu_wgt);
+    addWidget(workspace_menu_wgt);
 
     setCurrentWidget(start_menu_wgt);
 
@@ -25,9 +27,11 @@ widget_manager::widget_manager(QStackedWidget *parrent):QStackedWidget(parrent) 
     //  start_menu_wgt connections
     connect(start_menu_wgt,SIGNAL(exit_signal()),this,SLOT(close()));
     connect(start_menu_wgt,SIGNAL(new_ip_signal()),this,SLOT(set_current_new_ip_menu()));
-    connect(start_menu_wgt,SIGNAL(basic_ip_signal())
-            ,network_API,SLOT(change_device_ip_port()));
+    //connect(start_menu_wgt,SIGNAL(basic_ip_signal())
+      //      ,network_API,SLOT(change_device_ip_port()));
+
     connect(start_menu_wgt,SIGNAL(basic_ip_signal()),network_API,SLOT(initial_indicators_slot()));
+    connect(start_menu_wgt,SIGNAL(basic_ip_signal()),this,SLOT(set_current_workspace_menu()));
 
     //  new_ip_menu_wgt connections
     connect(new_ip_menu_wgt,SIGNAL(back_signal()),this,SLOT(set_current_start_menu()));
@@ -35,6 +39,9 @@ widget_manager::widget_manager(QStackedWidget *parrent):QStackedWidget(parrent) 
             network_API,SLOT(change_device_ip_port(QHostAddress,quintptr)));
     connect(new_ip_menu_wgt,SIGNAL(new_ip_port_info_signal(QHostAddress,quintptr))
             ,network_API,SLOT(initial_indicators_slot()));
+
+    //  workspace_menu connections
+    connect(workspace_menu_wgt,SIGNAL(back_signal()),this,SLOT(set_current_start_menu()));
 }
 
 void widget_manager::open_error_box_slot(const QString& info){
@@ -47,4 +54,8 @@ void widget_manager::set_current_start_menu(){
 
 void widget_manager::set_current_new_ip_menu(){
     setCurrentWidget(new_ip_menu_wgt);
+}
+
+void widget_manager::set_current_workspace_menu(){
+    setCurrentWidget(workspace_menu_wgt);
 }
