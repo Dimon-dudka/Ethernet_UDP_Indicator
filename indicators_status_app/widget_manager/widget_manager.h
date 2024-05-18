@@ -8,6 +8,9 @@
 //  Network data tool
 #include "network_data.h"
 
+//  Indicators data
+#include "indicators_local_data.h"
+
 //  Widgets
 #include "start_menu.h"
 #include "new_ip_menu.h"
@@ -19,6 +22,8 @@ class widget_manager : public QStackedWidget
 private:
 
     QPointer<network_data> network_API;
+
+    QPointer<indicators_local_data> indicators_data;
 
     QPointer<start_menu> start_menu_wgt;
     QPointer<new_ip_menu> new_ip_menu_wgt;

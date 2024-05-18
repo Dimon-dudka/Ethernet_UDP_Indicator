@@ -30,14 +30,14 @@ private slots:
 
 public slots:
 
-    void update_info_slot(QVector<quint16> new_data);
+    void update_info_slot(QVector<uint32_t> new_data);
 
 signals:
 
     // Index; Available; Serial; Type; Power; Color; I; Error
-    void changes_signal(QVector<quint16>);
+    void changes_signal(QVector<uint32_t>);
     void error_message_signal(QString);
 
 public:
-    indicator_subwidget(QWidget *parrent = 0, quint16 index = 0);
+    indicator_subwidget(QWidget *parrent = 0, uint32_t index = 0);
 };

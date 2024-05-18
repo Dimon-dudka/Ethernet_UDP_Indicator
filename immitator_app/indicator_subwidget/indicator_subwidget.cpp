@@ -1,6 +1,6 @@
 #include "indicator_subwidget.h"
 
-indicator_subwidget::indicator_subwidget(QWidget *parrent,quint16 index)
+indicator_subwidget::indicator_subwidget(QWidget *parrent,uint32_t index)
     :QWidget(parrent),indicator_index(index) {
 
     number_of_indicator_label = new QLabel(QString::number(index));
@@ -60,7 +60,7 @@ indicator_subwidget::indicator_subwidget(QWidget *parrent,quint16 index)
     setLayout(main_layout);
 }
 
-void indicator_subwidget::update_info_slot(QVector<quint16>new_data){
+void indicator_subwidget::update_info_slot(QVector<uint32_t>new_data){
     if(new_data[0]!=indicator_index)return;
 
     //  0       1           2       3   4       5    6  7
@@ -78,27 +78,27 @@ void indicator_subwidget::apply_slot(){
     bool chek;
 
     //  serial_num check
-    quint16 tmp_serial{serial_num_line_edit->text().toUShort(&chek)};
+    uint32_t tmp_serial{serial_num_line_edit->text().toUShort(&chek)};
     if(!chek){
         emit error_message_signal("Serial is not valid number!");
         return;
     }
 
     //   I num check
-    quint16 tmp_i = i_line_edit->text().toUShort(&chek);
+    uint32_t tmp_i = i_line_edit->text().toUShort(&chek);
     if(!chek){
         emit error_message_signal("I is not valid number!");
         return;
     }
 
     //   Error num check
-    quint16 tmp_error = error_line_edit->text().toUShort(&chek);
+    uint32_t tmp_error = error_line_edit->text().toUShort(&chek);
     if(!chek){
         emit error_message_signal("Error is not valid number!");
         return;
     }
 
-    emit changes_signal({indicator_index,(quint16)is_available_box->currentIndex(),tmp_serial
-        ,(quint16)type_box->currentIndex(),(quint16)power_box->currentIndex()
-        ,(quint16)color_box->currentIndex(),tmp_i,tmp_error});
+    emit changes_signal({indicator_index,(uint32_t)is_available_box->currentIndex(),tmp_serial
+        ,(uint32_t)type_box->currentIndex(),(uint32_t)power_box->currentIndex()
+        ,(uint32_t)color_box->currentIndex(),tmp_i,tmp_error});
 }

@@ -4,7 +4,7 @@ indicators_data::indicators_data(QObject * parrent) : QObject(parrent) {
     indicators_count = 10;
     indicators_active_count = 0;
 
-    for(quint16 i = 0;i<indicators_count;++i){
+    for(uint32_t i = 0;i<indicators_count;++i){
         indicators_work_map[i]=true;
 
         indicators_active_count+=1;
@@ -18,14 +18,14 @@ void indicators_data::get_indicators_count_slot(){
     emit return_indicators_count_signal(indicators_active_count);
 }
 
-void indicators_data::change_settings_slot(QVector<quint16>new_data){
+void indicators_data::change_settings_slot(QVector<uint32_t>new_data){
 
     //  0       1           2       3   4       5    6  7
     // Index; Available; Serial; Type; Power; Color; I; Error
     indicators_work_map[new_data[0]]=(bool)new_data[1];
 
     indicators_active_count=0;
-    for(quint16 i = 0;i<indicators_count;++i){
+    for(uint32_t i = 0;i<indicators_count;++i){
         if(indicators_work_map[i])indicators_active_count+=1;
     }
 
@@ -37,4 +37,16 @@ void indicators_data::change_settings_slot(QVector<quint16>new_data){
     indicators_info[new_data[0]].ErrorCode = new_data[7];
 
     emit update_ui(new_data);
+}
+
+void indicators_data::get_indicator_info_slot(uint32_t index){
+    emit return_indicator_info_signal(index,indicators_info[index]);
+}
+
+void indicators_data::switch_indicator_mode(uint32_t index,bool flag){
+    indicators_info[index].Power = (uint32_t)flag;
+
+    emit update_ui({index, indicators_work_map[index],indicators_info[index].SerialNum,
+        indicators_info[index].Type,indicators_info[index].Power,indicators_info[index].Color,
+        indicators_info[index].Current_mA,indicators_info[index].ErrorCode});
 }

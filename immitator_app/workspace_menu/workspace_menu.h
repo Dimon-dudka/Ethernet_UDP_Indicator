@@ -26,17 +26,17 @@ private:
 private slots:
 
     void exit_slot();
-    void send_forward_data_slot(QVector<quint16>data);
+    void send_forward_data_slot(QVector<uint32_t>data);
 
 public slots:
 
     void error_message_slot(QString info);
-    void update_widgets_info_slot(QVector<quint16>data);
+    void update_widgets_info_slot(QVector<uint32_t>data);
 
 signals:
 
     void exit_signal();
-    void send_forward_data_signal(QVector<quint16>);
+    void send_forward_data_signal(QVector<uint32_t>);
 
 public:
     workspace_menu(QWidget * parrent = 0);

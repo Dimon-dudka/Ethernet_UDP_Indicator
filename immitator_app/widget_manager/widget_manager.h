@@ -19,7 +19,6 @@ private:
     QPointer<workspace_menu> workspace_menu_wgt;
     QPointer<indicators_data> indicators_API;
 
-
 public:
     widget_manager(QStackedWidget *parrent = 0);
 };

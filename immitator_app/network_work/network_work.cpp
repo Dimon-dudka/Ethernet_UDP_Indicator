@@ -11,18 +11,15 @@ network_work::network_work(QObject * parrent) : QObject(parrent) {
     connect(udp_socket,SIGNAL(readyRead()),this,SLOT(read_data_from_socket()));
 }
 
-void network_work::change_ip_port(QHostAddress new_ip,quint16 new_port){
+void network_work::change_ip_port(QHostAddress new_ip,uint32_t new_port){
     if(new_ip==controll_app_ip&&new_port==controll_app_port)return;
 
     controll_app_ip = new_ip;
     controll_app_port = new_port;
 
-    //udp_socket->close();
-    //udp_socket->bind(controll_app_ip,controll_app_port);
 }
 
 void network_work::read_data_from_socket(){
-    qDebug()<<"read_data_from_socket - start "<<udp_socket->pendingDatagramSize();
 
     do{
         QByteArray datagram;
@@ -31,14 +28,13 @@ void network_work::read_data_from_socket(){
         quint16 senderPort;
 
         if(udp_socket->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort)==-1){
-            qDebug()<<"readDatagram - fail!";
+            emit error_message_signal("readDatagram - fail!");
             return;
         }
 
         change_ip_port(sender,senderPort);
 
         if (datagram.size() < sizeof(uint32_t)){
-            qDebug()<<"Incorrect package!";
             emit error_message_signal("Incorrect package!");
             return;
         }
@@ -47,11 +43,9 @@ void network_work::read_data_from_socket(){
         QDataStream dataStream(datagram);
         dataStream >> command >> index;
 
-        qDebug()<<"bevore switch:"<<QString::number(command);
         switch(command){
         case COMMAND_GET_INDICATORS_COUNT:
             emit get_count_indicators_signal();
-            qDebug("COMMAND_GET_INDICATORS_COUNT");
             break;
 
         case COMMAND_GET_STAT:
@@ -79,5 +73,29 @@ void network_work::send_count_indicators_slot(uint32_t count){
 
     if(udp_socket->writeDatagram(sending_data,controll_app_ip,controll_app_port) == -1){
         qDebug()<<"Failed to write socket in send_count_indicators_slot";
+    }
+}
+
+void network_work::send_indicator_info_slot(uint32_t index,sOneIndicatorStats stats){
+    QByteArray sending_data;
+
+    // Создание QDataStream с режимом записи и связывание с QByteArray
+    QDataStream out(&sending_data, QIODevice::WriteOnly);
+    out.setVersion(QDataStream::Qt_6_6);
+
+    out << COMMAND_GET_STAT;
+    out << index;
+
+    out << stats.SerialNum;
+    out << stats.Type;
+    out << stats.Power;
+    out << stats.Color;
+    out << stats.Current_mA;
+    out << stats.ErrorCode;
+
+    out << sizeof(sIndicatorStatisticsPack);
+
+    if(udp_socket->writeDatagram(sending_data,controll_app_ip,controll_app_port) == -1){
+        qDebug()<<"Failed to write socket in send_indicator_info_slot";
     }
 }
