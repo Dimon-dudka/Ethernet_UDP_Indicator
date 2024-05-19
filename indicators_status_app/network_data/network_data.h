@@ -8,6 +8,7 @@
 #include <QHostAddress>
 #include <QUdpSocket>
 #include <QTimer>
+#include <array>
 
 #include "Basic_Types.h"
 
@@ -21,8 +22,6 @@ private:
 
     QPointer<QUdpSocket> udp_socket;
 
-    //quint16 indicators_count;
-
     quintptr current_app_port, device_port;
     QHostAddress current_ip, device_ip;
 
@@ -30,6 +29,10 @@ private:
 
     void write_request(sIndicatorCommand request_to_device);
     void read_answer();
+
+    const uint32_t Polynomial = 0x04C11DB7;
+    std::array<uint32_t, 256> crc32Table;
+    uint32_t CalculateCrc32(const QByteArray &data);
 
 private slots:
 

@@ -6,6 +6,7 @@
 #include <QUdpSocket>
 #include <QByteArray>
 #include <QHostAddress>
+#include <array>
 
 #include "Basic_Types.h"
 
@@ -17,6 +18,10 @@ private:
 
     QHostAddress controll_app_ip;
     uint32_t controll_app_port;
+
+    const uint32_t Polynomial = 0x04C11DB7;
+    std::array<uint32_t, 256> crc32Table;
+    uint32_t CalculateCrc32(const QByteArray &data);
 
     void change_ip_port(QHostAddress new_ip,uint32_t new_port);
 

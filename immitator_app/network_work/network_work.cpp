@@ -9,6 +9,29 @@ network_work::network_work(QObject * parrent) : QObject(parrent) {
         qDebug()<<"network_work failed bind";
     }
     connect(udp_socket,SIGNAL(readyRead()),this,SLOT(read_data_from_socket()));
+
+    for (uint32_t i = 0; i < 256; ++i) {
+        uint32_t crc = i<< 24;
+        for (uint8_t j = 0; j < 8; ++j) {
+            if (crc & 0x80000000) {
+                crc = (crc << 1) ^ Polynomial;
+            } else {
+                crc = crc << 1;
+            }
+        }
+        crc32Table[i] = crc;
+    }
+}
+
+uint32_t network_work::CalculateCrc32(const QByteArray &data) {
+    uint32_t crc = 0xFFFFFFFF;
+
+    for (const auto &byte : data) {
+        uint8_t index = (crc>> 24) ^ static_cast<uint8_t>(byte);
+        crc = (crc<< 8) ^ crc32Table[index];
+    }
+
+    return crc ^ 0xFFFFFFFF;
 }
 
 void network_work::change_ip_port(QHostAddress new_ip,uint32_t new_port){
@@ -39,9 +62,16 @@ void network_work::read_data_from_socket(){
             return;
         }
 
-        uint32_t command,index;
+        uint32_t command,index,crc;
         QDataStream dataStream(datagram);
-        dataStream >> command >> index;
+        dataStream >> command >> index>>crc;
+
+        datagram.chop(sizeof(uint32_t));
+
+        if(crc!=CalculateCrc32(datagram)){
+            emit error_message_signal("CRC32 mismatch!");
+            return;
+        }
 
         switch(command){
         case COMMAND_GET_INDICATORS_COUNT:
@@ -69,7 +99,7 @@ void network_work::send_count_indicators_slot(uint32_t count){
     QByteArray sending_data;
     QDataStream out(&sending_data,QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_6_6);
-    out << COMMAND_GET_INDICATORS_COUNT << count << sizeof(sIndicatorCommand);
+    out << COMMAND_GET_INDICATORS_COUNT << count << CalculateCrc32(sending_data);
 
     if(udp_socket->writeDatagram(sending_data,controll_app_ip,controll_app_port) == -1){
         qDebug()<<"Failed to write socket in send_count_indicators_slot";
@@ -86,7 +116,6 @@ void network_work::send_indicator_info_slot(uint32_t index,sOneIndicatorStats st
 
     out << stats.SerialNum;
 
-    // Объединяем битовые поля в один 32-битный целочисленный тип
     uint32_t combinedFields = (stats.Type & 0xF) |
                               ((stats.Power & 0x1)<< 4) |
                               ((stats.Color & 0x3)<< 5) |
@@ -95,7 +124,7 @@ void network_work::send_indicator_info_slot(uint32_t index,sOneIndicatorStats st
 
     out<< stats.ErrorCode;
 
-    out<< sizeof(sIndicatorStatisticsPack);
+    out<< CalculateCrc32(sending_data);
 
     if (udp_socket->writeDatagram(sending_data, controll_app_ip, controll_app_port) == -1) {
         qDebug()<< "Failed to write socket in send_indicator_info_slot";

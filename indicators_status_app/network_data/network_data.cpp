@@ -7,6 +7,18 @@ network_data::network_data(QObject *parrent):QObject(parrent) {
         emit error_signal("Failed to create socket");
     }
 
+    for (uint32_t i = 0; i < 256; ++i) {
+        uint32_t crc = i<< 24;
+        for (uint8_t j = 0; j < 8; ++j) {
+            if (crc & 0x80000000) {
+                crc = (crc << 1) ^ Polynomial;
+            } else {
+                crc = crc << 1;
+            }
+        }
+        crc32Table[i] = crc;
+    }
+
     change_device_ip_port();
 }
 
@@ -39,7 +51,7 @@ void network_data::write_request(sIndicatorCommand request_to_device){
     QByteArray sending_data;
     QDataStream out(&sending_data,QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_6_6);
-    out << request_to_device.Command << request_to_device.IndicatorIndex << request_to_device.crc32;
+    out << request_to_device.Command << request_to_device.IndicatorIndex << CalculateCrc32(sending_data);
 
     if(udp_socket->writeDatagram(sending_data,device_ip,device_port) == -1){
         emit error_signal("Fail by send request!");
@@ -58,6 +70,17 @@ void network_data::write_request(sIndicatorCommand request_to_device){
     }
 }
 
+uint32_t network_data::CalculateCrc32(const QByteArray &data){
+    uint32_t crc = 0xFFFFFFFF;
+
+    for (const auto &byte : data) {
+        uint8_t index = (crc>> 24) ^ static_cast<uint8_t>(byte);
+        crc = (crc<< 8) ^ crc32Table[index];
+    }
+
+    return crc ^ 0xFFFFFFFF;
+}
+
 void network_data::read_answer(){
     while(udp_socket->hasPendingDatagrams()){
 
@@ -69,6 +92,8 @@ void network_data::read_answer(){
         QDataStream dataStream(datagram);
         dataStream >> command >> index;
 
+        datagram.chop(sizeof(uint32_t));
+
         switch(command){
         case COMMAND_GET_INDICATORS_COUNT:
             emit new_indicators_count_signal(index);
@@ -77,7 +102,7 @@ void network_data::read_answer(){
         case COMMAND_GET_STAT:
 
             sOneIndicatorStats tmp_stats;
-            uint32_t combinedFields;
+            uint32_t combinedFields,crc;
 
             dataStream>> tmp_stats.SerialNum;
 
@@ -88,7 +113,12 @@ void network_data::read_answer(){
             tmp_stats.Color = (combinedFields>> 5) & 0x3;
             tmp_stats.Current_mA = (combinedFields>> 7) & 0x1FFFFFF;
 
-            dataStream >>tmp_stats.ErrorCode;
+            dataStream >>tmp_stats.ErrorCode>>crc;
+
+            if(crc!=CalculateCrc32(datagram)){
+                emit error_signal("CRC Fail!");
+                return;
+            }
 
             emit indicator_info_signal(index,tmp_stats);
             break;

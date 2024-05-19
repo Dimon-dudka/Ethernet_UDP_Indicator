@@ -16,7 +16,8 @@ subwidget_menu::subwidget_menu(QWidget * parrent,uint32_t new_index)
     QStringList tmp_lst;
     tmp_lst<<"Off"<<"On";
     power_box->addItems(tmp_lst);
-    power_box->setCurrentIndex(1);
+    power_box->setCurrentIndex(0);
+    connect(power_box,SIGNAL(currentIndexChanged(int)),this,SLOT(apply_slot()));
 
     color_label = new QLabel("None");
     color_label->setAlignment(Qt::AlignCenter);
@@ -27,9 +28,6 @@ subwidget_menu::subwidget_menu(QWidget * parrent,uint32_t new_index)
     error_label = new QLabel("None");
     error_label->setAlignment(Qt::AlignCenter);
 
-    apply_button = new QPushButton("Apply");
-    connect(apply_button,SIGNAL(clicked()),this,SLOT(apply_slot()));
-
     main_layout = new QVBoxLayout;
 
     main_layout->addWidget(serial_label);
@@ -39,7 +37,6 @@ subwidget_menu::subwidget_menu(QWidget * parrent,uint32_t new_index)
     main_layout->addWidget(i_label);
     main_layout->addWidget(error_label);
     main_layout->addWidget(power_box);
-    main_layout->addWidget(apply_button);
 
     setLayout(main_layout);
 }
@@ -75,13 +72,11 @@ void subwidget_menu::update_data_slot(QVector<uint32_t>new_data){
     i_label->setText(QString::number(new_data[5]));
 
     if(new_data[6]==1){
-        apply_button->setEnabled(false);
         power_box->setEnabled(false);
         error_label->setText("Unavailble");
 
     }
     else if(new_data[6]==0){
-        apply_button->setEnabled(true);
         power_box->setEnabled(true);
         error_label->setText("");
     }

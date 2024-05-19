@@ -2,7 +2,6 @@
 
 #include <QWidget>
 #include <QPointer>
-#include <QPushButton>
 #include <QLabel>
 #include <QComboBox>
 #include <QVBoxLayout>
@@ -16,7 +15,6 @@ private:
     uint32_t index;
 
     QPointer<QVBoxLayout> main_layout;
-    QPointer<QPushButton> apply_button;
     QPointer<QComboBox> power_box;
     QPointer<QLabel> serial_label,type_label,color_label,i_label,error_label,power_label;
 
