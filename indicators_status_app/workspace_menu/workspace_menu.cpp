@@ -26,3 +26,7 @@ workspace_menu::workspace_menu(QWidget * parrent):QWidget(parrent) {
 void workspace_menu::back_button_slot(){
     emit back_signal();
 }
+
+void workspace_menu::get_indicator_info_slot(QVector<uint32_t> data){
+    subwidgets[data[0]]->update_data_slot(data);
+}

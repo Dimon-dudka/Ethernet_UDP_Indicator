@@ -23,6 +23,10 @@ private slots:
 
     void back_button_slot();
 
+public slots:
+
+    void get_indicator_info_slot(QVector<uint32_t> data);
+
 signals:
 
     void back_signal();

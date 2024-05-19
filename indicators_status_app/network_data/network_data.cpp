@@ -48,7 +48,7 @@ void network_data::write_request(sIndicatorCommand request_to_device){
     if(udp_socket->waitForReadyRead(1000)){
         read_answer();
     }else{
-        //emit error_signal("No device answer!");
+        emit error_signal("No device answer!");
     }
 }
 
@@ -65,25 +65,24 @@ void network_data::read_answer(){
 
         switch(command){
         case COMMAND_GET_INDICATORS_COUNT:
-            qDebug()<<"OK";
             emit new_indicators_count_signal(index);
             break;
 
         case COMMAND_GET_STAT:
+
             sOneIndicatorStats tmp_stats;
-            quint32 typeValue;
+            uint32_t combinedFields;
 
-            dataStream >> tmp_stats.SerialNum;
+            dataStream>> tmp_stats.SerialNum;
 
-            dataStream >> typeValue;
-            tmp_stats.Type = typeValue & 0b1111;
-            tmp_stats.Power = (typeValue >> 4) & 0b1;
-            tmp_stats.Color = (typeValue >> 5) & 0b11;
+            dataStream>> combinedFields;
 
-            quint32 current_mA_bits;
-            dataStream >> current_mA_bits >> tmp_stats.ErrorCode;
+            tmp_stats.Type = combinedFields & 0xF;
+            tmp_stats.Power = (combinedFields>> 4) & 0x1;
+            tmp_stats.Color = (combinedFields>> 5) & 0x3;
+            tmp_stats.Current_mA = (combinedFields>> 7) & 0x1FFFFFF;
 
-            tmp_stats.Current_mA = static_cast<quint32>(current_mA_bits);
+            dataStream >>tmp_stats.ErrorCode;
 
             emit indicator_info_signal(index,tmp_stats);
             break;

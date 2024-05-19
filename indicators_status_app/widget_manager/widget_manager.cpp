@@ -19,10 +19,14 @@ widget_manager::widget_manager(QStackedWidget *parrent):QStackedWidget(parrent) 
     connect(network_API,SIGNAL(error_signal(QString)),this,SLOT(open_error_box_slot(QString)));
     connect(network_API,SIGNAL(new_indicators_count_signal(uint32_t))
             ,indicators_data,SLOT(set_indicators_count_slot(uint32_t)));
+    connect(network_API,SIGNAL(indicator_info_signal(uint32_t,sOneIndicatorStats))
+            ,indicators_data,SLOT(set_indicator_info_slot(uint32_t,sOneIndicatorStats)));
 
     //  indicators_data connections
     connect(indicators_data,SIGNAL(get_all_info_signal(uint32_t))
             ,network_API,SLOT(get_all_indicators_data_slot(uint32_t)));
+    connect(indicators_data,SIGNAL(return_indicator_info_signal(QVector<uint32_t>))
+            ,workspace_menu_wgt,SLOT(get_indicator_info_slot(QVector<uint32_t>)));
 
     //  start_menu_wgt connections
     connect(start_menu_wgt,SIGNAL(exit_signal()),this,SLOT(close()));

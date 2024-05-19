@@ -11,4 +11,8 @@ void indicators_local_data::set_indicators_count_slot(uint32_t count){
 
 void indicators_local_data::set_indicator_info_slot(uint32_t index,sOneIndicatorStats stats){
     indicators_data[index]=stats;
+    //  0       1       2       3    4     5    6
+    // Index; Serial; Type; Power; Color; I; Error
+    emit return_indicator_info_signal({index,stats.SerialNum,stats.Type,stats.Power
+        ,stats.Color,stats.Current_mA,stats.ErrorCode});
 }
