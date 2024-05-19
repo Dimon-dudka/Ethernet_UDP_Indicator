@@ -31,6 +31,7 @@ private slots:
 public slots:
 
     void update_info_slot(QVector<uint32_t> new_data);
+    void update_power_slot(bool mode);
 
 signals:
 

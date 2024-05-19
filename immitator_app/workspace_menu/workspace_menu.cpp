@@ -48,3 +48,7 @@ void workspace_menu::exit_slot(){
 void workspace_menu::error_message_slot(QString info){
     QMessageBox::warning(0,"Warning",info, QMessageBox::Ok);
 }
+
+void workspace_menu::update_widget_indicator_power_slot(uint32_t index,bool mode){
+    subwidgets[index]->update_power_slot(mode);
+}

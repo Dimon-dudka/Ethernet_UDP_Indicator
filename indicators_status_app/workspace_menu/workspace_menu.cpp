@@ -15,6 +15,8 @@ workspace_menu::workspace_menu(QWidget * parrent):QWidget(parrent) {
             QPointer<subwidget_menu> tmp_widget = new subwidget_menu(0,index);
             subwidgets[index]=tmp_widget;
             main_layout->addWidget(tmp_widget,i,j);
+            connect(tmp_widget,SIGNAL(update_power_mode_signal(uint32_t,bool))
+                    ,this,SLOT(apply_power_subwidget_slot(uint32_t,bool)));
         }
     }
 
@@ -29,4 +31,8 @@ void workspace_menu::back_button_slot(){
 
 void workspace_menu::get_indicator_info_slot(QVector<uint32_t> data){
     subwidgets[data[0]]->update_data_slot(data);
+}
+
+void workspace_menu::apply_power_subwidget_slot(uint32_t index,bool choise){
+    emit apply_power_subwidget_signal(index,choise);
 }

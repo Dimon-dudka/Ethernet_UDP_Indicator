@@ -40,6 +40,7 @@ void indicators_data::change_settings_slot(QVector<uint32_t>new_data){
 }
 
 void indicators_data::get_indicator_info_slot(uint32_t index){
+    if(!indicators_work_map[index])indicators_info[index].ErrorCode = 1;    //  error not avaible
     emit return_indicator_info_signal(index,indicators_info[index]);
 }
 

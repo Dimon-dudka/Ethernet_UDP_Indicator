@@ -19,18 +19,18 @@ void network_data::change_device_ip_port(QHostAddress new_ip, quintptr new_port)
 
 void network_data::initial_indicators_slot(){
     change_device_ip_port();
-    get_indicators_count();
+    get_indicators_count_slot();
 
     if(time_view)time_view->~QTimer();
 
     time_view = new QTimer;
 
-    //connect(time_view,SIGNAL(timeout()),this,SLOT(get_all_indicators_data()));
+    connect(time_view,SIGNAL(timeout()),this,SLOT(get_indicators_count_slot()));
 
-    time_view->start(1000);
+    time_view->start(100);
 }
 
-void network_data::get_indicators_count(){
+void network_data::get_indicators_count_slot(){
     write_request({COMMAND_GET_INDICATORS_COUNT,0,sizeof(sIndicatorCommand)});
 }
 
@@ -43,12 +43,18 @@ void network_data::write_request(sIndicatorCommand request_to_device){
 
     if(udp_socket->writeDatagram(sending_data,device_ip,device_port) == -1){
         emit error_signal("Fail by send request!");
+        return;
     }
+
+    if(request_to_device.Command==COMMAND_INDIC_ACTION_OFF
+        ||request_to_device.Command==COMMAND_INDIC_ACTION_ON)return;
 
     if(udp_socket->waitForReadyRead(1000)){
         read_answer();
     }else{
         emit error_signal("No device answer!");
+        udp_socket->close();
+        return;
     }
 }
 
@@ -89,9 +95,14 @@ void network_data::read_answer(){
 
         default:
             emit error_signal("Unknown command!");
+            return;
             break;
         }
     }
+}
+
+void network_data::turn_indicator_power(uint32_t index,bool is_on){
+    write_request({is_on?COMMAND_INDIC_ACTION_ON:COMMAND_INDIC_ACTION_OFF,index,sizeof(sIndicatorCommand)});
 }
 
 void network_data::get_indicator_info(uint32_t index){
@@ -105,4 +116,6 @@ void network_data::get_all_indicators_data_slot(uint32_t indicators_count){
     }
 }
 
-
+void network_data::stop_timer_slot(){
+    time_view->~QTimer();
+}

@@ -22,6 +22,7 @@ private:
 private slots:
 
     void back_button_slot();
+    void apply_power_subwidget_slot(uint32_t index,bool choise);
 
 public slots:
 
@@ -30,6 +31,7 @@ public slots:
 signals:
 
     void back_signal();
+    void apply_power_subwidget_signal(uint32_t,bool);
 
 public:
     workspace_menu(QWidget * parrent = 0);

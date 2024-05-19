@@ -46,6 +46,9 @@ widget_manager::widget_manager(QStackedWidget *parrent):QStackedWidget(parrent) 
 
     //  workspace_menu connections
     connect(workspace_menu_wgt,SIGNAL(back_signal()),this,SLOT(set_current_start_menu()));
+    connect(workspace_menu_wgt,SIGNAL(back_signal()),network_API,SLOT(stop_timer_slot()));
+    connect(workspace_menu_wgt,SIGNAL(apply_power_subwidget_signal(uint32_t,bool))
+            ,network_API,SLOT(turn_indicator_power(uint32_t,bool)));
 }
 
 void widget_manager::open_error_box_slot(const QString& info){

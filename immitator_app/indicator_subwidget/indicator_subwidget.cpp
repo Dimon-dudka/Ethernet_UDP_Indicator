@@ -23,7 +23,7 @@ indicator_subwidget::indicator_subwidget(QWidget *parrent,uint32_t index)
     color_box->setCurrentIndex(0);
     tmp_box_values.clear();
 
-    tmp_box_values<<"On"<<"Off";
+    tmp_box_values<<"Off"<<"On";
     power_box->addItems(tmp_box_values);
     power_box->setCurrentIndex(0);
     tmp_box_values.clear();
@@ -101,4 +101,8 @@ void indicator_subwidget::apply_slot(){
     emit changes_signal({indicator_index,(uint32_t)is_available_box->currentIndex(),tmp_serial
         ,(uint32_t)type_box->currentIndex(),(uint32_t)power_box->currentIndex()
         ,(uint32_t)color_box->currentIndex(),tmp_i,tmp_error});
+}
+
+void indicator_subwidget::update_power_slot(bool mode){
+    power_box->setCurrentIndex(mode);
 }

@@ -18,7 +18,7 @@ private:
     QPointer<QVBoxLayout> main_layout;
     QPointer<QPushButton> apply_button;
     QPointer<QComboBox> power_box;
-    QPointer<QLabel> serial_label,type_label,color_label,i_label,error_label;
+    QPointer<QLabel> serial_label,type_label,color_label,i_label,error_label,power_label;
 
 private slots:
 
@@ -30,7 +30,7 @@ public slots:
 
 signals:
 
-    void update_power_mode_signal(uint32_t,uint32_t);   // index, value
+    void update_power_mode_signal(uint32_t,bool);   // index, value
 
 public:
     subwidget_menu(QWidget * parrent = 0,uint32_t new_index = 0);

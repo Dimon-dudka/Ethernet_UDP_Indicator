@@ -30,6 +30,8 @@ widget_manager::widget_manager(QStackedWidget *parrent):QStackedWidget(parrent) 
             ,indicators_API,SLOT(get_indicator_info_slot(uint32_t)));
     connect(network_API,SIGNAL(set_indicator_active(uint32_t,bool))
             ,indicators_API,SLOT(switch_indicator_mode(uint32_t,bool)));
+    connect(network_API,SIGNAL(set_indicator_active(uint32_t,bool))
+            ,workspace_menu_wgt,SLOT(update_widget_indicator_power_slot(uint32_t,bool)));
 
     //  Indicators connections
     connect(indicators_API,SIGNAL(return_indicators_count_signal(uint32_t))

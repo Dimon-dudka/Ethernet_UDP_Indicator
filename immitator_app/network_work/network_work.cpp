@@ -100,26 +100,5 @@ void network_work::send_indicator_info_slot(uint32_t index,sOneIndicatorStats st
     if (udp_socket->writeDatagram(sending_data, controll_app_ip, controll_app_port) == -1) {
         qDebug()<< "Failed to write socket in send_indicator_info_slot";
     }
-    /*
-    QByteArray sending_data;
 
-    QDataStream out(&sending_data, QIODevice::WriteOnly);
-    out.setVersion(QDataStream::Qt_6_6);
-
-    out << COMMAND_GET_STAT;
-    out << index;
-
-    out << stats.SerialNum;
-    out << stats.Type;
-    out << stats.Power;
-    out << stats.Color;
-    out << stats.Current_mA;
-    out << stats.ErrorCode;
-
-    out << sizeof(sIndicatorStatisticsPack);
-
-    if(udp_socket->writeDatagram(sending_data,controll_app_ip,controll_app_port) == -1){
-        qDebug()<<"Failed to write socket in send_indicator_info_slot";
-    }
-*/
 }

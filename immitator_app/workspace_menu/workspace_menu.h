@@ -32,6 +32,7 @@ public slots:
 
     void error_message_slot(QString info);
     void update_widgets_info_slot(QVector<uint32_t>data);
+    void update_widget_indicator_power_slot(uint32_t index,bool mode);
 
 signals:
 
