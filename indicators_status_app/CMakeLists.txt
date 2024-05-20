@@ -28,6 +28,7 @@ set(HEADERS
     ${CMAKE_SOURCE_DIR}/workspace_menu/workspace_menu.h
     ${CMAKE_SOURCE_DIR}/indicators_local_data/indicators_local_data.h
     ${CMAKE_SOURCE_DIR}/subwidget_menu/subwidget_menu.h
+    ${CMAKE_SOURCE_DIR}/exchange_status_widget/exchange_status_widget.h
 )
 
 set(SOURCES
@@ -39,6 +40,7 @@ set(SOURCES
     ${CMAKE_SOURCE_DIR}/workspace_menu/workspace_menu.cpp
     ${CMAKE_SOURCE_DIR}/indicators_local_data/indicators_local_data.cpp
     ${CMAKE_SOURCE_DIR}/subwidget_menu/subwidget_menu.cpp
+    ${CMAKE_SOURCE_DIR}/exchange_status_widget/exchange_status_widget.cpp
 )
 
 add_executable(Ethernet_UDP_Indicator ${SOURCES} ${HEADERS})
@@ -52,6 +54,7 @@ target_include_directories(Ethernet_UDP_Indicator
     PUBLIC ${CMAKE_SOURCE_DIR}/workspace_menu
     PUBLIC ${CMAKE_SOURCE_DIR}/indicators_local_data
     PUBLIC ${CMAKE_SOURCE_DIR}/subwidget_menu
+    PUBLIC ${CMAKE_SOURCE_DIR}/exchange_status_widget
 )
 
 target_link_libraries(Ethernet_UDP_Indicator

@@ -3,6 +3,7 @@
 indicators_data::indicators_data(QObject * parrent) : QObject(parrent) {
     indicators_count = 10;
     indicators_active_count = 0;
+    current_getting_index = 0;
 
     for(uint32_t i = 0;i<indicators_count;++i){
         indicators_work_map[i]=true;
@@ -15,7 +16,9 @@ indicators_data::indicators_data(QObject * parrent) : QObject(parrent) {
 }
 
 void indicators_data::get_indicators_count_slot(){
-    emit return_indicators_count_signal(indicators_active_count);
+    current_getting_index = 0;
+    //emit return_indicators_count_signal(indicators_active_count);
+    emit return_indicators_count_signal(indicators_count);
 }
 
 void indicators_data::change_settings_slot(QVector<uint32_t>new_data){
@@ -40,6 +43,7 @@ void indicators_data::change_settings_slot(QVector<uint32_t>new_data){
 }
 
 void indicators_data::get_indicator_info_slot(uint32_t index){
+
     if(!indicators_work_map[index])indicators_info[index].ErrorCode = 1;    //  error not avaible
     emit return_indicator_info_signal(index,indicators_info[index]);
 }

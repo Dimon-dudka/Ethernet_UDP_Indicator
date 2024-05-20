@@ -75,25 +75,25 @@ void indicator_subwidget::update_info_slot(QVector<uint32_t>new_data){
 }
 
 void indicator_subwidget::apply_slot(){
-    bool chek;
+    bool check;
 
     //  serial_num check
-    uint32_t tmp_serial{serial_num_line_edit->text().toUShort(&chek)};
-    if(!chek){
+    uint32_t tmp_serial{serial_num_line_edit->text().toUInt(&check)};
+    if(!check){
         emit error_message_signal("Serial is not valid number!");
         return;
     }
 
     //   I num check
-    uint32_t tmp_i = i_line_edit->text().toUShort(&chek);
-    if(!chek){
+    uint32_t tmp_i = i_line_edit->text().toUInt(&check);
+    if(!check){
         emit error_message_signal("I is not valid number!");
         return;
     }
 
     //   Error num check
-    uint32_t tmp_error = error_line_edit->text().toUShort(&chek);
-    if(!chek){
+    uint32_t tmp_error = error_line_edit->text().toUInt(&check);
+    if(!check){
         emit error_message_signal("Error is not valid number!");
         return;
     }

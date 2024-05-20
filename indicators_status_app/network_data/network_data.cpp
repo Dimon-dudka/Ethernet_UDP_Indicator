@@ -88,7 +88,7 @@ void network_data::read_answer(){
         datagram.resize(udp_socket->pendingDatagramSize());
         udp_socket->readDatagram(datagram.data(),datagram.size());
 
-        uint32_t command,index;
+        uint32_t command,index,crc;
         QDataStream dataStream(datagram);
         dataStream >> command >> index;
 
@@ -96,13 +96,22 @@ void network_data::read_answer(){
 
         switch(command){
         case COMMAND_GET_INDICATORS_COUNT:
+
+            dataStream>>crc;
+            if(crc!=CalculateCrc32(datagram)){
+                emit error_signal("CRC Fail!");
+                return;
+            }
+
+            emit network_status_work_signal();
+
             emit new_indicators_count_signal(index);
             break;
 
         case COMMAND_GET_STAT:
 
             sOneIndicatorStats tmp_stats;
-            uint32_t combinedFields,crc;
+            uint32_t combinedFields;
 
             dataStream>> tmp_stats.SerialNum;
 
@@ -120,18 +129,16 @@ void network_data::read_answer(){
                 return;
             }
 
-            emit indicator_info_signal(index,tmp_stats);
-            break;
+            emit network_status_work_signal();
 
-        default:
-            emit error_signal("Unknown command!");
-            return;
+            emit indicator_info_signal(index,tmp_stats);
             break;
         }
     }
 }
 
 void network_data::turn_indicator_power(uint32_t index,bool is_on){
+    emit network_status_work_signal();
     write_request({is_on?COMMAND_INDIC_ACTION_ON:COMMAND_INDIC_ACTION_OFF,index,sizeof(sIndicatorCommand)});
 }
 

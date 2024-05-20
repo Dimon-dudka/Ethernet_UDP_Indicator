@@ -51,7 +51,6 @@ void subwidget_menu::update_data_slot(QVector<uint32_t>new_data){
     if(new_data[2]==0)type_label->setText("Lamp");
     else type_label->setText("LED");
 
-    //power_box->setCurrentIndex(new_data[3]);
     power_label->setText(new_data[3]?"On":"Off");
 
     switch(new_data[4]){
@@ -69,7 +68,7 @@ void subwidget_menu::update_data_slot(QVector<uint32_t>new_data){
         break;
     }
 
-    i_label->setText(QString::number(new_data[5]));
+    i_label->setText(QString::number(new_data[5])+" mA");
 
     if(new_data[6]==1){
         power_box->setEnabled(false);

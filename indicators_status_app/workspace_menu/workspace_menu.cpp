@@ -22,14 +22,42 @@ workspace_menu::workspace_menu(QWidget * parrent):QWidget(parrent) {
 
     main_layout->addWidget(back_button,i,0);
 
+    network_status_wgt = new exchange_status_widget;
+    main_layout->addWidget(network_status_wgt,i,4);
+
     setLayout(main_layout);
 }
 
+void workspace_menu::update_status_network_slot(){
+    network_status_wgt->set_exchange_slot(true);
+}
 void workspace_menu::back_button_slot(){
     emit back_signal();
 }
 
 void workspace_menu::get_indicator_info_slot(QVector<uint32_t> data){
+    if (data[6] == 1) {
+        subwidgets[data[0]]->hide();
+    } else {
+        subwidgets[data[0]]->show();
+    }
+
+    int index = 0;
+    for (int i = 0; i < 2; ++i) {
+        for (int j = 0; j < 5; ++j) {
+            while (index < total_indicators_count && !subwidgets[index]->isVisible()) {
+                ++index;
+            }
+            if (index < total_indicators_count) {
+                main_layout->addWidget(subwidgets[index], i, j);
+                ++index;
+            }
+        }
+    }
+
+    main_layout->addWidget(back_button, 2, 0);
+    main_layout->addWidget(network_status_wgt, 2, 4);
+
     subwidgets[data[0]]->update_data_slot(data);
 }
 

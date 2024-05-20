@@ -10,7 +10,7 @@ class indicators_data : public QObject
 {
     Q_OBJECT
 private:
-    uint32_t indicators_count,indicators_active_count;
+    uint32_t indicators_count,indicators_active_count,current_getting_index;
 
     QHash<uint32_t,bool> indicators_work_map;
     QVector<sOneIndicatorStats> indicators_info;

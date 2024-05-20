@@ -21,6 +21,8 @@ widget_manager::widget_manager(QStackedWidget *parrent):QStackedWidget(parrent) 
             ,indicators_data,SLOT(set_indicators_count_slot(uint32_t)));
     connect(network_API,SIGNAL(indicator_info_signal(uint32_t,sOneIndicatorStats))
             ,indicators_data,SLOT(set_indicator_info_slot(uint32_t,sOneIndicatorStats)));
+    connect(network_API,SIGNAL(network_status_work_signal())
+            ,workspace_menu_wgt,SLOT(update_status_network_slot()));
 
     //  indicators_data connections
     connect(indicators_data,SIGNAL(get_all_info_signal(uint32_t))

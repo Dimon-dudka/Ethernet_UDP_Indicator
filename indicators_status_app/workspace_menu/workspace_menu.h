@@ -4,8 +4,11 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <QHash>
+#include <QPair>
 
+//  Subwidgets
 #include "subwidget_menu.h"
+#include "exchange_status_widget.h"
 
 class workspace_menu : public QWidget
 {
@@ -15,9 +18,11 @@ private:
     uint32_t total_indicators_count;
 
     QHash<uint32_t,QPointer<subwidget_menu>>subwidgets;
+    //QHash<uint32_t,QPair<uint32_t,uint32_t>>subwidgets_positions;
 
     QPointer<QGridLayout>main_layout;
     QPointer<QPushButton> back_button;
+    QPointer<exchange_status_widget> network_status_wgt;
 
 private slots:
 
@@ -27,6 +32,7 @@ private slots:
 public slots:
 
     void get_indicator_info_slot(QVector<uint32_t> data);
+    void update_status_network_slot();
 
 signals:
 

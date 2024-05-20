@@ -44,6 +44,7 @@ signals:
 
     void new_indicators_count_signal(uint32_t);
     void indicator_info_signal(uint32_t,sOneIndicatorStats);
+    void network_status_work_signal();
 
 public slots:
 
