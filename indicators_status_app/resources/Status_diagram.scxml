@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" binding="early" xmlns:qt="http://www.qt.io/2015/02/scxml-ext" name="Status_diagram" qt:editorversion="12.0.1" initial="GET_INDICATORS_COUNT_REQUEST">
+    <qt:editorinfo initialGeometry="165.37;50.42;-20;-20;40;40"/>
+    <final id="Final_1">
+        <qt:editorinfo geometry="165.37;598.12;-20;-20;40;40" scenegeometry="165.37;598.12;145.37;578.12;40;40"/>
+    </final>
+    <state id="GET_INDICATORS_COUNT_REQUEST">
+        <qt:editorinfo geometry="90.17;167.42;-60;-50;270.41;101.83" scenegeometry="90.17;167.42;30.17;117.42;270.41;101.83"/>
+        <transition type="external" event="initial setup of getted indicators count" target="GET_INDICATOR_INFO">
+            <qt:editorinfo movePoint="109;2.76" endTargetFactors="49.59;11.94"/>
+        </transition>
+        <transition type="external" event="no data received">
+            <qt:editorinfo movePoint="-68.68;-52.52" localGeometry="248.75;0;248.75;-83.49"/>
+        </transition>
+    </state>
+    <state id="GET_INDICATOR_INFO">
+        <qt:editorinfo geometry="96.31;321.49;-70.33;-50;278.79;100" scenegeometry="96.31;321.49;25.98;271.49;278.79;100"/>
+        <transition type="external" event="starting_work" target="Work_state">
+            <qt:editorinfo endTargetFactors="50.54;11.94"/>
+        </transition>
+    </state>
+    <state id="Work_state">
+        <qt:editorinfo geometry="85.82;469.13;-60;-50;279.10;100" scenegeometry="85.82;469.13;25.82;419.13;279.10;100"/>
+        <transition type="external" event="every 100 ms update data" target="GET_INDICATORS_COUNT_REQUEST">
+            <qt:editorinfo movePoint="-59.19;0" endTargetFactors="4.45;47.54" localGeometry="-227.60;-1.13;-227.60;-303.22"/>
+        </transition>
+        <transition type="external" event="sending request without answer" target="TURN_INDICATOR_ON/OFF">
+            <qt:editorinfo endTargetFactors="10.41;55.62"/>
+        </transition>
+        <transition type="external" event="Transition_17" target="Final_1"/>
+    </state>
+    <state id="TURN_INDICATOR_ON/OFF">
+        <qt:editorinfo geometry="446.81;469.13;-60;-50;231.50;100" scenegeometry="446.81;469.13;386.81;419.13;231.50;100"/>
+        <transition type="external" event="return to work state" target="Work_state">
+            <qt:editorinfo endTargetFactors="76.73;54.04" localGeometry="0.27;-76.12;-258.84;-76.12"/>
+        </transition>
+    </state>
+</scxml>

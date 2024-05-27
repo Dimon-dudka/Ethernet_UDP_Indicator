@@ -43,7 +43,13 @@ set(SOURCES
     ${CMAKE_SOURCE_DIR}/exchange_status_widget/exchange_status_widget.cpp
 )
 
-add_executable(Ethernet_UDP_Indicator ${SOURCES} ${HEADERS})
+add_executable(Ethernet_UDP_Indicator ${SOURCES} ${HEADERS}
+    indicator_controll_app_model.qmodel
+    Status_diagram.scxml
+    user_interactions_model.qmodel
+    apps_interactions.qmodel
+    control_app.qmodel
+)
 
 target_include_directories(Ethernet_UDP_Indicator
     PUBLIC ${CMAKE_SOURCE_DIR}

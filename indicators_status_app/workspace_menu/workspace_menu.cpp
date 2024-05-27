@@ -10,7 +10,18 @@ workspace_menu::workspace_menu(QWidget * parrent):QWidget(parrent) {
     total_indicators_count = 10;
 
     uint32_t index{0},i{0};
-    for(;i<2;++i){
+
+    main_layout->addWidget(back_button,i,0);
+
+    network_info_label = new QLabel("Network status: ");
+    main_layout->addWidget(network_info_label,i,3);
+
+    network_status_wgt = new exchange_status_widget;
+    main_layout->addWidget(network_status_wgt,i,4);
+
+    i+=1;
+
+    for(;i<3;++i){
         for(uint32_t j = 0;j<5;++j,++index){
             QPointer<subwidget_menu> tmp_widget = new subwidget_menu(0,index);
             subwidgets[index]=tmp_widget;
@@ -19,11 +30,6 @@ workspace_menu::workspace_menu(QWidget * parrent):QWidget(parrent) {
                     ,this,SLOT(apply_power_subwidget_slot(uint32_t,bool)));
         }
     }
-
-    main_layout->addWidget(back_button,i,0);
-
-    network_status_wgt = new exchange_status_widget;
-    main_layout->addWidget(network_status_wgt,i,4);
 
     setLayout(main_layout);
 }
@@ -43,7 +49,12 @@ void workspace_menu::get_indicator_info_slot(QVector<uint32_t> data){
     }
 
     int index = 0;
-    for (int i = 0; i < 2; ++i) {
+
+    main_layout->addWidget(back_button, 0, 0);
+    main_layout->addWidget(network_info_label,0,3);
+    main_layout->addWidget(network_status_wgt, 0, 4);
+
+    for (int i = 1; i < 3; ++i) {
         for (int j = 0; j < 5; ++j) {
             while (index < total_indicators_count && !subwidgets[index]->isVisible()) {
                 ++index;
@@ -54,9 +65,6 @@ void workspace_menu::get_indicator_info_slot(QVector<uint32_t> data){
             }
         }
     }
-
-    main_layout->addWidget(back_button, 2, 0);
-    main_layout->addWidget(network_status_wgt, 2, 4);
 
     subwidgets[data[0]]->update_data_slot(data);
 }

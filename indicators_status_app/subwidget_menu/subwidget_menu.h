@@ -4,6 +4,7 @@
 #include <QPointer>
 #include <QLabel>
 #include <QComboBox>
+#include <QHash>
 #include <QVBoxLayout>
 #include <QVector>
 
@@ -13,6 +14,8 @@ class subwidget_menu : public QWidget
 private:
 
     uint32_t index;
+
+    QHash<uint32_t,QString> color_choise;
 
     QPointer<QVBoxLayout> main_layout;
     QPointer<QComboBox> power_box;

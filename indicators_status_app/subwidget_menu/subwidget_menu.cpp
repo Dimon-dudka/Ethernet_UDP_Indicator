@@ -3,6 +3,11 @@
 subwidget_menu::subwidget_menu(QWidget * parrent,uint32_t new_index)
     :QWidget(parrent), index(new_index){
 
+    color_choise[0]="Yellow";
+    color_choise[1]="Green";
+    color_choise[2]="Red";
+    color_choise[3]="Reserve";
+
     serial_label = new QLabel("None");
     serial_label->setAlignment(Qt::AlignCenter);
 
@@ -28,6 +33,8 @@ subwidget_menu::subwidget_menu(QWidget * parrent,uint32_t new_index)
     error_label = new QLabel("None");
     error_label->setAlignment(Qt::AlignCenter);
 
+    error_label->setStyleSheet(" QLabel { font-weight: bold; color : red; }");
+
     main_layout = new QVBoxLayout;
 
     main_layout->addWidget(serial_label);
@@ -46,36 +53,18 @@ void subwidget_menu::update_data_slot(QVector<uint32_t>new_data){
     if(new_data[0]!=index)return;
     //  0       1       2       3    4    5    6
     // Index; Serial; Type; Power; Color; I; Error
-    serial_label->setText(QString::number(new_data[1]));
+    serial_label->setText("Serial: "+QString::number(new_data[1]));
 
-    if(new_data[2]==0)type_label->setText("Lamp");
-    else type_label->setText("LED");
+    if(new_data[2]==0)type_label->setText("Type: Lamp");
+    else type_label->setText("Type: LED");
 
-    power_label->setText(new_data[3]?"On":"Off");
+    power_label->setText(new_data[3]?"Power: On":"Power: Off");
 
-    switch(new_data[4]){
-    case 0:
-        color_label->setText("Yellow");
-        break;
-    case 1:
-        color_label->setText("Green");
-        break;
-    case 2:
-        color_label->setText("Red");
-        break;
-    case 3:
-        color_label->setText("Reserve");
-        break;
-    }
+    color_label->setText("Color: "+color_choise[new_data[4]]);
 
-    i_label->setText(QString::number(new_data[5])+" mA");
+    i_label->setText("I = "+QString::number(new_data[5])+" mA");
 
-    if(new_data[6]==1){
-        power_box->setEnabled(false);
-        error_label->setText("Unavailble");
-
-    }
-    else if(new_data[6]==0){
+    if(new_data[6]==0){
         power_box->setEnabled(true);
         error_label->setText("");
     }

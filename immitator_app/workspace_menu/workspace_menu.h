@@ -2,7 +2,6 @@
 
 #include <QWidget>
 #include <QVector>
-#include <QPushButton>
 #include <QBoxLayout>
 #include <QVector>
 #include <QMessageBox>
@@ -19,13 +18,10 @@ private:
     QVector<QPointer<indicator_subwidget>> subwidgets;
     QVector<QPointer<QHBoxLayout>>indicators_layouts;
 
-    QPointer<QPushButton> exit_button;
-
     QPointer<QGridLayout>main_layout;
 
 private slots:
 
-    void exit_slot();
     void send_forward_data_slot(QVector<uint32_t>data);
 
 public slots:
@@ -36,7 +32,6 @@ public slots:
 
 signals:
 
-    void exit_signal();
     void send_forward_data_signal(QVector<uint32_t>);
 
 public:

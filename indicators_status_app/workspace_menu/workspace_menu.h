@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QGridLayout>
 #include <QPushButton>
+#include <QLabel>
 #include <QHash>
 #include <QPair>
 
@@ -18,10 +19,11 @@ private:
     uint32_t total_indicators_count;
 
     QHash<uint32_t,QPointer<subwidget_menu>>subwidgets;
-    //QHash<uint32_t,QPair<uint32_t,uint32_t>>subwidgets_positions;
 
     QPointer<QGridLayout>main_layout;
     QPointer<QPushButton> back_button;
+    QPointer<QLabel> network_info_label;
+
     QPointer<exchange_status_widget> network_status_wgt;
 
 private slots:

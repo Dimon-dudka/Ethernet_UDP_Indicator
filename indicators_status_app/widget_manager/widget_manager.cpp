@@ -2,9 +2,11 @@
 
 widget_manager::widget_manager(QStackedWidget *parrent):QStackedWidget(parrent) {
 
+    //  Backend part
     network_API = new network_data;
     indicators_data = new indicators_local_data;
 
+    //  Widgets
     start_menu_wgt = new start_menu;
     new_ip_menu_wgt = new new_ip_menu;
     workspace_menu_wgt = new workspace_menu;

@@ -13,7 +13,6 @@ widget_manager::widget_manager(QStackedWidget *parrent):QStackedWidget(parrent) 
 
 
     //  Workspace connections
-    connect(workspace_menu_wgt,SIGNAL(exit_signal()),this,SLOT(close()));
     connect(workspace_menu_wgt,SIGNAL(send_forward_data_signal(QVector<uint32_t>)),
             indicators_API,SLOT(change_settings_slot(QVector<uint32_t>)));
 

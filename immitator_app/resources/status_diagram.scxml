@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" binding="early" xmlns:qt="http://www.qt.io/2015/02/scxml-ext" name="status_diagram" qt:editorversion="12.0.1" initial="indiator_init">
+    <qt:editorinfo initialGeometry="251.90;11.40;-20;-20;40;40"/>
+    <state id="indiator_init">
+        <qt:editorinfo geometry="251.90;135.81;-60;-50;120;100" scenegeometry="251.90;135.81;191.90;85.81;120;100"/>
+        <transition type="external" event="start_work" target="work_state">
+            <qt:editorinfo movePoint="59.09;5.18"/>
+        </transition>
+    </state>
+    <state id="work_state">
+        <qt:editorinfo geometry="251.90;289.23;-60;-50;120;100" scenegeometry="251.90;289.23;191.90;239.23;120;100"/>
+        <transition type="external" event="update info after request" target="indicator_info update" cond="if request">
+            <qt:editorinfo movePoint="77.27;2.76"/>
+        </transition>
+        <transition type="external" event="becoming request" target="Indicator_info_returning">
+            <qt:editorinfo localGeometry="255.66;0"/>
+        </transition>
+    </state>
+    <state id="indicator_info update">
+        <qt:editorinfo geometry="214.25;489.27;-60;-50;195.29;100" scenegeometry="214.25;489.27;154.25;439.27;195.29;100"/>
+        <transition type="external" event="returning to work state" target="work_state">
+            <qt:editorinfo movePoint="-85.55;1.38" localGeometry="-140.14;-0.36;-140.14;-200.04"/>
+        </transition>
+    </state>
+    <state id="Indicator_info_returning">
+        <qt:editorinfo geometry="468.99;489.27;-60;-50;197.14;100" scenegeometry="468.99;489.27;408.99;439.27;197.14;100"/>
+        <transition type="external" target="work_state">
+            <qt:editorinfo localGeometry="1.31;86.72;-394.03;86.72;-394.03;-200.04"/>
+        </transition>
+    </state>
+</scxml>
